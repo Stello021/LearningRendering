@@ -1,0 +1,6 @@
+[submodule "OBJDecoder"]
+	path = LearningRendering/OBJDecoder
+	url = https://github.com/Stello021/OBJDecoder.git
+[submodule "TGA-Decoder"]
+	path = LearningRendering/TGA-Decoder
+	url = https://github.com/Stello021/TGA-Decoder.git
