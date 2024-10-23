@@ -48,13 +48,15 @@ $$
 so:
 
 $$
-\lambda_1 = 1 - \lambda_2 -\lambda_3
+
 
 $$
 
 $$
-P = (1 - \lambda_2 - \lambda_3)A + \lambda_2B + \lambda_3C
+\lambda_1 = 1 - \lambda_2 -\lambda_3 \rightarrow P = (1 - \lambda_2 - \lambda_3)A + \lambda_2B + \lambda_3C
 $$
+
+### 
 
 ### Vector-oriented perspective
 
@@ -69,13 +71,13 @@ $$
 that became a linear system when vectors are broken down ino two coordinates:
 
 $$
-\begin{cases} \vec{PA}_x + \lambda_2\vec{AB}_x + \lambda_3\vec{AC}_x = 0 \\ \vec{PA}_y + \lambda_2\vec{AB}_y + \lambda_3\vec{AC}_y = 0 \end{cases}
+\begin{cases} \vec{PA}_x + \lambda_2\vec{AB}_x + \lambda_3\vec{AC}_x = 0 \\\ \vec{PA}_y + \lambda_2\vec{AB}_y + \lambda_3\vec{AC}_y = 0 \end{cases}
 $$
 
 In matrices:
 
 $$
-\begin{bmatrix} 1 & 1 & 1 \\ \vec{PA}_x & \vec{AB}_x & \vec{AC}_x \\ \vec{PA}_y & \vec{AB}_y & \vec{AC}_y \end{bmatrix} * \begin{bmatrix} 1 \\ \lambda_2 \\ \lambda_3 \end{bmatrix} = 0 \rightarrow Cross Product
+\begin{bmatrix} 1 & 1 & 1 \\\ \vec{PA}_x & \vec{AB}_x & \vec{AC}_x \\\ \vec{PA}_y & \vec{AB}_y & \vec{AC}_y \end{bmatrix} * \begin{bmatrix} 1 \\\ \lambda_2 \\\ \lambda_3 \end{bmatrix} = 0 \rightarrow Cross Product
 $$
 
 #### Weights as areas
@@ -87,5 +89,3 @@ Each coordinate $\lambda_A$ is proportional to the area of the triangle formed b
 Barycentric coordinates are positive when point is inside the triangle, 0 when is on the edge and negative when is outside
 
 --------
-
-
