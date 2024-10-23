@@ -87,5 +87,3 @@ Each coordinate $\lambda_A$ is proportional to the area of the triangle formed b
 #### Point Location
 
 Barycentric coordinates are positive when point is inside the triangle, 0 when is on the edge and negative when is outside
-
---------
