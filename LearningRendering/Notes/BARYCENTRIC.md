@@ -84,7 +84,7 @@ $$
 
 Each coordinate $\lambda_A$ is proportional to the area of the triangle formed by $P$ and the two vertices opposite to vertex $A$. For example $\lambda_1$ is proportional to the area of the triangle formed by points $P$, $B$ and $C$.
 
-### Point Location
+#### Point Location
 
 Barycentric coordinates are positive when point is inside the triangle, 0 when is on the edge and negative when is outside
 
