@@ -48,11 +48,6 @@ $$
 so:
 
 $$
-
-
-$$
-
-$$
 \lambda_1 = 1 - \lambda_2 -\lambda_3 \rightarrow P = (1 - \lambda_2 - \lambda_3)A + \lambda_2B + \lambda_3C
 $$
 
