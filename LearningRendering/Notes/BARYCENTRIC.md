@@ -48,6 +48,12 @@ $$
 so:
 
 $$
+\lambda_1 = 1 - \lambda_2 -\lambda_3 
+$$
+
+$$
+P = (1 - \lambda_2 - \lambda_3)A + \lambda_2B + \lambda_3C
+\lambda_1 = 1 - \lambda_2 -\lambda_3 \rightarrow P = (1 - \lambda_2 - \lambda_3)A + \lambda_2B + \lambda_3C
 \lambda_1 = 1 - \lambda_2 -\lambda_3 \rightarrow P = (1 - \lambda_2 - \lambda_3)A + \lambda_2B + \lambda_3C
 $$
 
@@ -79,8 +85,6 @@ $$
 
 Each coordinate $\lambda_A$ is proportional to the area of the triangle formed by $P$ and the two vertices opposite to vertex $A$. For example $\lambda_1$ is proportional to the area of the triangle formed by points $P$, $B$ and $C$.
 
-### Point Location
+#### Point Location
 
 Barycentric coordinates are positive when point is inside the triangle, 0 when is on the edge and negative when is outside
-
---------
