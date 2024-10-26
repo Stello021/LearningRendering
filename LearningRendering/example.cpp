@@ -13,10 +13,15 @@ const int height = 800;
 
 int main(int argc, char** argv) {
 	TGAImage image(width, height, TGAImage::RGB);
-	//Model* model = new Model("suzanne.obj");
+	Model* model = new Model("suzanne.obj");
 	//DrawWireframeModel(image, model, width, height, white);
-	DrawFilledTriangle_MonoThread(ScreenPoint(10, 70), ScreenPoint(50, 160), ScreenPoint(70, 80), image, red);
-	DrawFilledTriangle_MonoThread(ScreenPoint(180, 50), ScreenPoint(150, 1), ScreenPoint(70, 180), image, white);
+	//DrawFilledTriangle_MonoThread(ScreenPoint(10, 70), ScreenPoint(50, 160), ScreenPoint(70, 80), image, red);
+	//DrawFilledTriangle_MonoThread(ScreenPoint(180, 50), ScreenPoint(150, 1), ScreenPoint(70, 180), image, white);
+
+	//Vector2<int> vertices[3] = { Vector2<int>(10,10), Vector2<int>(100, 30), Vector2<int>(190, 160) };
+	//DrawFilledTriangle_MultiThread(vertices, image, TGAColor(255, 0, 0, 255));
+	//DrawTrianglesFromModel(model, image, width, height);
+	DrawFlatShadedModel(model, image, width, height);
 	image.FlipVertically(); // i want to have the origin at the left bottom corner of the image
 	image.WriteTGAFile("example.tga");
 	//delete model;

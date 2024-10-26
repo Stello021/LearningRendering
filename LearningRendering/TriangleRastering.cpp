@@ -1,4 +1,8 @@
 #include "TriangleRastering.h"
+#include "TGA-Decoder/TGAReader/TgaImage.h"
+#include "TGA-Decoder/TGAReader/tgaData.h"
+#include "OBJDecoder/OBJDecoder/VectorsMath.h"
+#include <vector>
  
 //Scanline implementation is compoed by 3 steps
 //1. Sort vertices of the triangle by their y-coordinates
@@ -71,5 +75,118 @@ void DrawFilledTriangle_MonoThread(ScreenPoint vertex1, ScreenPoint vertex2, Scr
 		{
 			image.SetColor(j, y, color);
 		}
+	}
+}
+
+Vector3<float> Barycentric(Vector2<int>* vertices, Vector2<int> p)
+{
+	//Check BARYCENTRIC.md for details
+	Vector3<float> CrossProduct =
+		Vector3<float>(vertices[2].X - vertices[0].X, vertices[1].X - vertices[0].X, vertices[0].X - p.X).Cross(
+		Vector3<float>(vertices[2].Y - vertices[0].Y, vertices[1].Y - vertices[0].Y, vertices[0].Y - p.Y));
+
+	//Degenerate Triangle Check
+	//if the z-component of cross product is close to 0, triangle is degenerate
+	//It means that it's collapsed into a line or P is not inside a valid triangle
+	if (std::abs(CrossProduct.Z) < 1)
+	{
+		return Vector3<float>(-1, 1, 1); //Invalid point
+	}
+		
+	//CrossProduct.Z is the determinant of the transformation matrix formed by the triangle, used to normalize coordinates
+	return Vector3<float>(1.f - (CrossProduct.X + CrossProduct.Y) / CrossProduct.Z, CrossProduct.Y / CrossProduct.Z, CrossProduct.X / CrossProduct.Z);
+}
+
+void DrawFilledTriangle_MultiThread(Vector2<int>* vertices, TGAImage& image, TGAColor color)
+{
+	//Init Bounding Box 
+	Vector2<int> b_boxMin(image.GetWidth() - 1, image.GetHeigth() - 1);
+	Vector2<int> b_boxMax(0, 0);
+	Vector2<int> clamp = b_boxMin; //clamping to image dimensions
+
+	//Bounding Box Calculation 
+	for (int i = 0; i < 3; i++)
+	{
+		b_boxMin.X = std::max(0, std::min(b_boxMin.X, vertices[i].X));
+		b_boxMin.Y = std::max(0, std::min(b_boxMin.Y, vertices[i].Y));
+
+		b_boxMax.X = std::min(clamp.X, std::max(b_boxMax.X, vertices[i].X));
+		b_boxMax.Y = std::min(clamp.Y, std::max(b_boxMax.Y, vertices[i].Y));
+	}
+
+	//Rasterization
+	Vector2<int> P;
+	for (P.X = b_boxMin.X; P.X <= b_boxMax.X; P.X++)
+	{
+		for (P.Y = b_boxMin.Y; P.Y <= b_boxMax.Y; P.Y++)
+		{
+			Vector3<float> bc_screen = Barycentric(vertices, P);
+			if (bc_screen.X < 0 || bc_screen.Y < 0 || bc_screen.Z < 0)
+			{
+				continue;
+			}
+
+			image.SetColor(P.X, P.Y, color);
+		}
+	}
+
+
+}
+
+void DrawTrianglesFromModel(Model*& model, TGAImage& image, const int width, const int height)
+{
+	//Loop through faces of the model
+	for (int i = 0; i < model->FacesAmount(); i++)
+	{
+		std::vector<int> face = model->Face(i);
+
+		//store the 2D screen coordinates for each vertices of the face
+		Vector2<int> screenCoords[3];
+
+		//iterate for each vertices of the face
+		for (int j = 0; j < 3; j++)
+		{
+			//retrives the 3D world coordinate of the current vertex of the face
+			Vector3<float> worldCoords = model->Vertex(face[j]);
+
+			//world coordinates are converted in screen coordinates
+			//- adding +1 to coordinates to normalizes them (shift range from [-1, 1] to [0, 2]
+			//- scales the coordinates by the screen dimensions, mapping them to the screen coordinates
+			screenCoords[j] = Vector2<int>((worldCoords.X + 1.) * width / 2., (worldCoords.Y + 1.) * height / 2.);
+		}
+		DrawFilledTriangle_MultiThread(screenCoords, image, TGAColor(rand() % 255, rand() % 255, rand() % 255, 255));
+	}
+}
+
+void DrawFlatShadedModel(Model*& model, TGAImage& image, const int width, const int height)
+{
+	Vector3<float> lightDirection(0, 0, -1); //define the direction of the light source, pointing towards the viewer along the z-axis
+
+	for (int i = 0; i < model->FacesAmount(); i++)
+	{
+		std::vector<int> face = model->Face(i);
+
+		Vector2<int> screenCoords[3];
+		Vector3<float> worldCoords[3];
+		for (int j = 0; j < 3; j++) {
+			Vector3<float> v = model->Vertex(face[j]);
+			screenCoords[j] = Vector2<int>((v.X + 1.) * width / 2., (v.Y + 1.) * height / 2.);
+			worldCoords[j] = v;
+		}
+
+		//Cross product between two edges of the triangle in 3D Space to calculate normal vector
+		Vector3<float> normal = (worldCoords[2] - worldCoords[0]).Cross(worldCoords[1] - worldCoords[0]);
+		normal.Normalize();
+
+		float intensity = normal.Dot(lightDirection); //dot product measures how aligned the surface is with the light
+		// close to 1 -> surface is directly facing the light (max brightness)
+		// close to 0 -> surface is perpendicular to the light
+		// negative -> surface is facing away from the light
+
+		if (intensity > 0)
+		{
+			DrawFilledTriangle_MultiThread(screenCoords, image, TGAColor(intensity * 255, intensity * 255, intensity * 255, 255));
+		}
+	
 	}
 }
