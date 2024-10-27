@@ -21,6 +21,7 @@ void DrawFilledTriangle_MonoThread(ScreenPoint vertex1, ScreenPoint vertex2, Scr
 /// Calculates barycentric coordinates for a point P with respect to vertices of a triangle 
 /// </summary>
 Vector3<float> Barycentric(Vector2<int>* vertices, Vector2<int> p);
+Vector3<float> Barycentric(Vector3<float>* vertices, Vector3<float> p);
 
 /// <summary>
 /// Bounding Box Rasterization Algorithm
@@ -36,3 +37,10 @@ void DrawTrianglesFromModel(Model*& model, TGAImage& image, const int width, con
 /// Renders 3D model by lighting its faces based on the angle of the light source
 /// </summary>
 void DrawFlatShadedModel(Model*& model, TGAImage& image, const int width, const int heigth);
+
+/// <summary>
+/// Render triangle with basic depth handling using z-buffer
+/// </summary>
+void DrawDeepShadedTriangle(Vector3<float>* vertices, float* zBuffer, TGAImage& image, TGAColor color);
+
+void DrawDeepShadedModel(Model*& model, TGAImage& image, const int width, const int heigth);

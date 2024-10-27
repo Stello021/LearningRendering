@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
 	//Vector2<int> vertices[3] = { Vector2<int>(10,10), Vector2<int>(100, 30), Vector2<int>(190, 160) };
 	//DrawFilledTriangle_MultiThread(vertices, image, TGAColor(255, 0, 0, 255));
 	//DrawTrianglesFromModel(model, image, width, height);
-	DrawFlatShadedModel(model, image, width, height);
+	DrawDeepShadedModel(model, image, width, height);
 	image.FlipVertically(); // i want to have the origin at the left bottom corner of the image
 	image.WriteTGAFile("example.tga");
 	//delete model;
