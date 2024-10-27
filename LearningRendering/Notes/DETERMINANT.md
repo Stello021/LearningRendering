@@ -1,3 +1,7 @@
+---
+type: Journal
+---
+
 ## Determinant
 
 A **determinant** is a scalar value that is computed from elements of a square matrix. It is a fundamental concept in linear algebra with several important properties and applications, especially related to solving systems of linear equations, matrix inversions, and transformations in geometry.
